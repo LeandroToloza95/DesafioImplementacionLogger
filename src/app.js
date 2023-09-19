@@ -3,34 +3,36 @@ import productManager from './productManager.js'
 
 const app = express();
 
+async function getTotalProducts(){
+    const productosArchivo = new productManager('productos.json')
+    const response = await productosArchivo.getProducts()
+    return response
+}
 
+function isNumber(val){
+    return typeof val==='number';
+}
 
 app.get('/products',(req, res) =>{
-    console.log('query',req.query);
-    const {limit} = req.query
-    // if(name){
-    //     const user = users.filter(u => u.name === name)
-    //     return res.json({message: 'user',user})
-    // }
-    const productosArchivo = new productManager('productos.json')
+    async function main() {
+        console.log('query',req.query);
+        const {limit} = req.query
 
-    const productos = async function test(){
-        const productos1 = await productosArchivo.getProducts()
-        return productos1
-    }
-    const prueba = productos();
-    console.log(prueba);
+        const  productos = await getTotalProducts()
+  
+        if(limit){
+            const productosArray = 
+                isNumber(+limit) ? productos.slice(0,limit) 
+                : productos          
+    
+            return res.json({message: 'products',products:productosArray})
+        }
 
-    if(limit){
-        const productosArray = 
-            isNumber(+limit) ? productos.slice(0,limit) 
-            : productos          
-
-        return res.json({message: 'products',products:productosArray})
-    }
-    // console.log(req);
-    //params - query - ody
-    res.json({message: 'All products',productos})
+        res.json({message: 'All products',productos})
+      }
+      
+    main();
+    
 })
 
 app.get('/users/:idUser',(req,res)=>{
