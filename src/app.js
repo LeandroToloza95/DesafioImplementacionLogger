@@ -25,21 +25,38 @@ app.get('/products',(req, res) =>{
                 isNumber(+limit) ? productos.slice(0,limit) 
                 : productos          
     
-            return res.json({message: 'products',products:productosArray})
+            return res.json({message: 'products', products : productosArray})
         }
 
-        res.json({message: 'All products',productos})
+        res.json({message: 'All products', products : productos})
       }
       
     main();
     
 })
 
-app.get('/users/:idUser',(req,res)=>{
-    const {idUser}= req.params
-    const user = users.find(u => u.id === +idUser )
-    console.log(req.params);
-    res.json({message: 'User',user})
+app.get('/products/:idproduct',(req,res)=>{
+    async function main() {
+
+        console.log(req.params);
+
+        const  productos = await getTotalProducts()
+
+        const {idproduct}= req.params
+
+        if (idproduct){
+            const producto = 
+                isNumber(idproduct.toNumber()) ? productos.find(u => u.id === +idproduct )
+                : productos
+            console.log(+isNumber(idproduct));
+            return res.json({message: 'All products', products : producto})
+        }
+
+        res.json({message: 'All products', products : productos})
+
+    }
+        
+    main();
 })
 
 app.listen(8080,() => console.log("Servidor 8080 escuchando"))
