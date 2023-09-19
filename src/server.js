@@ -46,8 +46,8 @@ app.get('/products/:idproduct',(req,res)=>{
 
         if (idproduct){
             const producto = 
-                isNumber(idproduct.toNumber()) ? productos.find(u => u.id === +idproduct )
-                : productos
+                isNumber(+idproduct) ? productos.find(u => u.id === +idproduct )
+                : bproductos
             console.log(+isNumber(idproduct));
             return res.json({message: 'All products', products : producto})
         }
