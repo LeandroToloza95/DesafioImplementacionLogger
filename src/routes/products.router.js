@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { productManagerClass } from '../productManager.js'
+import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router();
 
@@ -48,11 +49,14 @@ router.get('/:idproduct', async (req, res) => {
 
 })
 
+//con multer para subir imagenes
+//router.post('/',upload.single('productimage'), async (req, res) => {
 router.post('/', async (req, res) => {
     //validacion del body de campos obligatorios
-    const { title, description, price } = req.body
+    const { title, description, price, trademark, status, category, code, stock } = req.body
 
-    if (!title || !description || !price) {
+
+    if (!title || !description || !price || !trademark || !status || !category || !code || !stock) {
         return res.status(400).json({ message: 'Information sent is incompleted' })
     }
     try {
@@ -63,8 +67,6 @@ router.post('/', async (req, res) => {
     catch (error) {
         return res.status(500).json({ message: error })
     }
-
-
 })
 
 router.delete('/:idproduct', async (req, res) => {

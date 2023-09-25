@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { userManagerClass } from '../UserManager.js'
+import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
@@ -47,7 +48,7 @@ router.get('/:iduser', async (req, res) => {
 
 })
 
-router.post('/', async (req, res) => {
+router.post('/', authMiddleware, async (req, res) => {
     //validacion del body de campos obligatorios
     const { first_name, last_name, email, password, isAdmin } = req.body
 
@@ -64,7 +65,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.delete('/:iduser', async (req, res) => {
+router.delete('/:iduser', authMiddleware, async (req, res) => {
     try {
         // console.log(req.params);
         const { iduser } = req.params
@@ -82,7 +83,7 @@ router.delete('/:iduser', async (req, res) => {
     }
 })
 
-router.put('/:iduser', async (req, res) => {
+router.put('/:iduser', authMiddleware, async (req, res) => {
     try {
         // console.log(req.params);
         const { iduser } = req.params

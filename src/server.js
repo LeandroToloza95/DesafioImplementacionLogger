@@ -12,6 +12,6 @@ app.use(express.static(__dirname + '/public'))
 //routes
 app.use('/api/products',productsRouter)
 app.use('/api/users',usersRouter)
-app.use('/api/cart',cartRouter)
+app.use('/api/carts',cartRouter)
 
 app.listen(8080, () => console.log("Servidor 8080 escuchando"))
