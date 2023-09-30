@@ -48,7 +48,8 @@ router.get('/:iduser', async (req, res) => {
 
 })
 
-router.post('/', authMiddleware, async (req, res) => {
+//router.post('/', authMiddleware, async (req, res) => { --esto si quiero validar con el middleware si es admin
+router.post('/', async (req, res) => {
     //validacion del body de campos obligatorios
     const { first_name, last_name, email, password, isAdmin } = req.body
 
@@ -58,7 +59,10 @@ router.post('/', authMiddleware, async (req, res) => {
     try {
         const newUser = await userManagerClass.addUser(req.body)
 
-        return res.status(200).json({ message: `New users created with id ${newUser.id}`, users: newUser })
+        //return res.status(200).json({ message: `New users created with id ${newUser.id}`, users: newUser })
+        //En vez de enviar la anterior linea envio una ventana mas personalizada
+        res.user=newUser
+        res.redirect(`/api/signupresponse/${newUser.id}`)
     }
     catch (error) {
         return res.status(500).json({ message: error })

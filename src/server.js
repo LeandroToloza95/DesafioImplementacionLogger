@@ -3,15 +3,49 @@ import productsRouter from './routes/products.router.js';
 import cartRouter from './routes/cart.router.js';
 import usersRouter from './routes/users.router.js';
 import __dirname from './utils.js';
+import { engine } from 'express-handlebars';
+import viewsRouter from './routes/views.router.js'
+import {Server} from 'socket.io';
 
 const app = express();
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'))
 
-//routes
-app.use('/api/products',productsRouter)
-app.use('/api/users',usersRouter)
-app.use('/api/carts',cartRouter)
+//handlebars
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', __dirname + '/views');
 
-app.listen(8080, () => console.log("Servidor 8080 escuchando"))
+
+//routes
+app.use('/api/products', productsRouter)
+app.use('/api/users', usersRouter)
+app.use('/api/carts', cartRouter)
+
+//render handlebars
+app.use('/api',viewsRouter)
+
+const httpServer = app.listen(8080, () => console.log("Servidor 8080 escuchando"))
+
+//Websocket - desde lado servidor
+const socketServer = new Server(httpServer);
+
+//connection - disconnect
+const names = [];
+
+socketServer.on('connection',(socket)=>{
+    //console.log(`Cliente conectado: ${socket.id}`);
+    socket.on("disconnect",()=>{
+        //console.log(`Cliente desconectado: ${socket.id}`)
+    })
+
+    socket.on('firstEvent',(info)=>{
+        names.push(info)
+        console.log(`Array: ${names}`);
+        //socket.emit('secondEvent',names)
+        socketServer.emit('secondEvent',names)
+    })
+    }
+    
+);

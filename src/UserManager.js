@@ -74,7 +74,7 @@ class userManager {
             if (usuario) {
                 return usuario
             } else {
-                return -1
+                return null
             }
         }
         catch (error) {
