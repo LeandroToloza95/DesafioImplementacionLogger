@@ -11,6 +11,10 @@ router.get('/vista2',(req,res) => {
     res.render('vista2')
 })
 
+router.get('/chat',(req,res) => {
+    res.render('chat')
+})
+
 router.get('/signup',(req,res) => {
     res.render('signup',{style: 'signup.css'})
 })

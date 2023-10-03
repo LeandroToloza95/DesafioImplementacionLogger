@@ -33,19 +33,32 @@ const socketServer = new Server(httpServer);
 
 //connection - disconnect
 const names = [];
+const messages = [];
+// socketServer.on('connection',(socket)=>{
+//     //console.log(`Cliente conectado: ${socket.id}`);
+//     socket.on("disconnect",()=>{
+//         //console.log(`Cliente desconectado: ${socket.id}`)
+//     })
+
+//     socket.on('firstEvent',(info)=>{
+//         // names.push(info)
+//         // console.log(`Array: ${names}`);
+//         //socket.emit('secondEvent',names)
+//         //socketServer.emit('secondEvent',names)
+//         // socketServer.broadcast.emit('secondEvent',names)
+//         socketServer.emit('secondEvent',info)
+//     })
+//     }
+    
+// );
 
 socketServer.on('connection',(socket)=>{
-    //console.log(`Cliente conectado: ${socket.id}`);
-    socket.on("disconnect",()=>{
-        //console.log(`Cliente desconectado: ${socket.id}`)
-    })
+    socket.on('newUser',(user)=>{
+        socket.broadcast.emit('newUserBroadcast',user)
+    });
 
-    socket.on('firstEvent',(info)=>{
-        names.push(info)
-        console.log(`Array: ${names}`);
-        //socket.emit('secondEvent',names)
-        socketServer.emit('secondEvent',names)
+    socket.on('message',(info)=>{
+        messages.push(info)
+        socketServer.emit('chat',messages)
     })
-    }
-    
-);
+})
