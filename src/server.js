@@ -6,6 +6,8 @@ import __dirname from './utils.js';
 import { engine } from 'express-handlebars';
 import viewsRouter from './routes/views.router.js'
 import {Server} from 'socket.io';
+import "./dao/config.js";
+import { ProductsManager } from './dao/db/productManagerDb.js';
 
 const app = express();
 app.use(express.json())
@@ -53,7 +55,7 @@ const messages = [];
 // );
 
 socketServer.on('connection',(socket)=>{
-    socket.on('newUser',(user)=>{
+    socket.on('newProduct',(user)=>{
         socket.broadcast.emit('newUserBroadcast',user)
     });
 
@@ -62,3 +64,4 @@ socketServer.on('connection',(socket)=>{
         socketServer.emit('chat',messages)
     })
 })
+

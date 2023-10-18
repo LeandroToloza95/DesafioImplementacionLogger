@@ -1,10 +1,15 @@
 const socketClient = io();
-const form = document.getElementById("chatForm")
-const inputMessage = document.getElementById("chatMessage")
-const h3name = document.getElementById("name")
-const divChat = document.getElementById("chat")
+const form = document.getElementById("form")
+// const inputMessage = document.getElementById("chatMessage")
+// const h3name = document.getElementById("name")
+// const divChat = document.getElementById("chat")
 
-let user;
+const textarea = document.getElementById('title');
+
+textarea.addEventListener('input', function () {
+  this.style.height = 'auto';
+  this.style.height = (this.scrollHeight) + 'px';
+});
 
 swal.fire({
     title: 'Welcome',
@@ -25,20 +30,13 @@ swal.fire({
     // }
 })
 
-socketClient.on('newUserBroadcast',(user)=>{
+socketClient.on('newProductBroadcast',(product)=>{
     Toastify({
-        text: `${user} connected`,
+        text: `${product} connected`,
         duration: 5000,
-        // destination: "https://github.com/apvarun/toastify-js",
-        // newWindow: true,
-        // close: true,
-        // gravity: "top", // `top` or `bottom`
-        // position: "left", // `left`, `center` or `right`
-        // stopOnFocus: true, // Prevents dismissing of toast on hover
         style: {
           background: "linear-gradient(to right, #00b09b, #96c93d)",
         },
-        // onClick: function(){} // Callback after click
       }).showToast();
 })
 
@@ -52,7 +50,7 @@ form.onsubmit = (e)=>{
 
 }
 
-socketClient.on('newProduct',(messages)=>{
+socketClient.on('chat',(messages)=>{
     const chat = messages.map(objMessage=>
         `<p>${objMessage.name}: ${objMessage.message} </p>`).join(' ')
     divChat.innerHTML = chat;

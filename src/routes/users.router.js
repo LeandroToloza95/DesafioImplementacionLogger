@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userManagerClass } from '../UserManager.js'
+import { userManagerClass } from '../dao/FS/UserManager.js'
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 const router = Router();

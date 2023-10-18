@@ -54,5 +54,29 @@
         ],
         "code": 57,
         "stock": 56
+    },
+    {
+        "id": 5,
+        "title": "Procesador Intel Celeron G5900 3.10GHz Socket 1151 OEM Coffe Lake",
+        "trademark": "Intel",
+        "description": "Procesador",
+        "price": "50000",
+        "status": "on",
+        "category": "Playstation",
+        "thumbnail": "https://elcomercio.pe/resizer/OlP6E276Ki4JkyoKD-J2Dvk7_qE=/580x330/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/IYXWE7K56RFERMR2VCSK5YXZMA.jpg",
+        "code": "65",
+        "stock": "4"
+    },
+    {
+        "id": 6,
+        "title": "prueba",
+        "trademark": "prueba",
+        "description": "prueba",
+        "price": "12",
+        "status": "on",
+        "category": "prueba",
+        "thumbnail": "https://1.bp.blogspot.com/-Qhj4QTvgU7I/XPgw9XdjMeI/AAAAAAAADJQ/ElhHlgKjMdk-XPikHPC890xk92lUOPidACPcBGAYYCw/w320-h227/boton1.png",
+        "code": "233",
+        "stock": "12"
     }
 ]

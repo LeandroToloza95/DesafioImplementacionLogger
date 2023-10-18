@@ -1,14 +1,20 @@
 import { Router } from "express";
-import { userManagerClass } from "../UserManager.js";
+import { userManagerClass } from "../dao/FS/UserManager.js";
+import {productManagerClass} from "../dao/FS/productManager.js";
 
 const router = Router()
 
-router.get('/vista1',(req,res) => {
-    res.render('vista1')
+router.get('/home',async (req,res) => {
+    const products = await productManagerClass.getProducts();
+    res.render('home',{products, style:'list.css'})
 })
 
-router.get('/vista2',(req,res) => {
-    res.render('vista2')
+router.get('/realtimeproducts',(req,res) => {
+    res.render('realtimeproducts')
+})
+
+router.get('/addproduct',async (req,res) => {
+    res.render('addProduct',{style:'list.css'})
 })
 
 router.get('/chat',(req,res) => {

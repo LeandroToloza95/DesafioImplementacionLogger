@@ -2,7 +2,7 @@
 
 import { log } from 'console';
 import fs from 'fs';
-
+import __dirname from '../../utils.js';
 class productManager {
 
     constructor(path) {
@@ -47,18 +47,19 @@ class productManager {
             }else{
                 queryObjNew=queryObj
             }
+            
 
             const { order } = queryObjNew 
             const { limit } = queryObjNew 
             
             const existeArchivo = fs.existsSync(this.path)
-
+            
             if (existeArchivo) {
                 const info = await fs.promises.readFile(this.path, 'utf-8')
                 const infoParsed = JSON.parse(info)
                 const infoSorted = await this.infoSorter(order,infoParsed)
                 const infoLimited = await this.infoLimiter(limit,infoSorted)
-
+                
                 return infoLimited
 
             } else {
@@ -230,4 +231,4 @@ async function test() {
 
 // test()
 
-export const productManagerClass = new productManager('productos.json')
+export const productManagerClass = new productManager(__dirname+'/productos.json')

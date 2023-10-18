@@ -1,0 +1,20 @@
+<h3>Add products</h3>
+<div class="container_form">
+    <form action="/api/products/" method="post">
+        <p><span>Title</span> <textarea type="text" name="title" id="title" class="textarea-title"></textarea>
+        <p><span>Trademark:</span> <input type="text" name="trademark" id="trademark"></p>
+        <p><span>Description:</span> <input type="text" name="description" id="description"></p>
+        <p><span>Price:</span> <input type="number" name="price" id="price"></p>
+        <p><span>Status:</span> <input type="checkbox" name="status" id="status"></p>
+        <p><span>Category:</span> <input type="text" name="category" id="category"></p>
+        <p><span>Thumbnail:</span> <input type="url" name="thumbnail" id="thumbnail"></p>
+        <p><span>Code:</span> <input type="number" name="code" id="code"></p>
+        <p><span>Stock:</span> <input type="number" name="stock" id="stock"></p>
+        <p><input type="submit" value="SAVE"></p>
+    </form>
+</div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/addProduct.js"></script>
