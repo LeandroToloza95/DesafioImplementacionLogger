@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { productManagerClass } from '../dao/FS/productManager.js'
+import { productManagerClass } from '../dao/db/productManagerDb.js'
 import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router();
@@ -7,8 +7,11 @@ const router = Router();
 router.get('/', async (req, res) => {
     try {
 
-        const { limit } = req.query
-        const { order } = req.query
+        const { limit } = (req.query ?? null)
+        const { sort } = (req.query ?? null)
+        const { page } = (req.query ?? null)
+        const { trademark } = (req.query ?? null)
+
         const productos = await productManagerClass.getProducts(req.query)
 
         if (!productos.length) {
@@ -20,15 +23,15 @@ router.get('/', async (req, res) => {
             mensajeLimite = `limited to ${limit} elements`
         }
 
-        let mensajeOrden = 'without order'
-        if (order && (order == 'DESC' || order == 'ASC')) {
-            mensajeOrden = `ordered to ${order}`
+        let mensajeOrden = 'without sort'
+        if (sort && (sort == 'DESC' || sort == 'ASC')) {
+            mensajeOrden = `ordered to ${sort}`
         }
 
         return res.status(200).json({ message: `Products found ` + mensajeLimite + " " + mensajeOrden, "products": productos })
     }
     catch (error) {
-        return res.status(500).json({ message: error })
+        return res.status(500).json({ message: error.message })
     }
 })
 
@@ -36,7 +39,7 @@ router.get('/:idproduct', async (req, res) => {
 
     try {
         const { idproduct } = req.params
-        const productos = await productManagerClass.getProductsbyID(+idproduct)
+        const productos = await productManagerClass.getProductsbyID(idproduct)
         if (productos === -1) {
             return res.status(400).json({ message: 'Product no found' })
         }
@@ -44,7 +47,7 @@ router.get('/:idproduct', async (req, res) => {
 
     }
     catch (error) {
-        return res.status(500).json({ message: error })
+        return res.status(500).json({ message: error.message })
     }
 
 })
@@ -52,20 +55,20 @@ router.get('/:idproduct', async (req, res) => {
 //con multer para subir imagenes
 //router.post('/',upload.single('productimage'), async (req, res) => {
 router.post('/', async (req, res) => {
-    //validacion del body de campos obligatorios
-    const { title, description, price, trademark, status, category, code, stock } = req.body
-
-
-    if (!title || !description || !price || !trademark || !status || !category || !code || !stock) {
-        return res.status(400).json({ message: 'Information sent is incompleted' })
-    }
     try {
-        const newProduct = await productManagerClass.addProduct(req.body)
+        //validacion del body de campos obligatorios
+        const { title, description, price, trademark, status, category, code, stock } = req.body
 
-        return res.status(200).json({ message: `New products created with id ${newProduct.id}`, products: newProduct })
+        if (!title || !description || !price || !trademark || !status || !category || !code || !stock) {
+            return res.status(400).json({ message: 'Information sent is incompleted' })
+        }
+        const newProduct = await productManagerClass.addProduct(req.body)
+        res.redirect(`/api/productresponse/${newProduct.id}`)
+        //res.status(200).json({ message: `New products created with id ${newProduct.id}`, products: newProduct })
+
     }
     catch (error) {
-        return res.status(500).json({ message: error })
+        return res.status(500).json({ message: error.message })
     }
 })
 
@@ -73,17 +76,17 @@ router.delete('/:idproduct', async (req, res) => {
     try {
         // console.log(req.params);
         const { idproduct } = req.params
-        const productDeleted = await productManagerClass.deleteProduct(+idproduct)
+        const productDeleted = await productManagerClass.deleteProduct(idproduct)
 
         if (productDeleted === -1) {
             return res.status(400).json({ message: 'Product no found' })
         }
 
-        return res.status(200).json({ message: `Product deleted with id ${productDeleted[0].id}`, products: productDeleted })
+        return res.status(200).json({ message: `Product deleted with id ${idproduct}`, products: productDeleted })
 
     }
     catch (error) {
-        return res.status(500).json({ message: error })
+        return res.status(500).json({ message: error.message })
     }
 })
 
@@ -92,17 +95,17 @@ router.put('/:idproduct', async (req, res) => {
         // console.log(req.params);
         const { idproduct } = req.params
         const obj = req.body
-        const productUpdated = await productManagerClass.updateProduct(+idproduct, obj)
+        const productUpdated = await productManagerClass.updateProduct(idproduct, obj)
 
-        if (productUpdated === -1) {
+        if (productUpdated.matchedCount === 0) {
             return res.status(400).json({ message: 'Product no found' })
         }
 
-        return res.status(200).json({ message: `Product updated with id ${productUpdated.id}`, products: productUpdated })
+        return res.status(200).json({ message: `Product updated with id ${idproduct}`, products: productUpdated })
 
     }
     catch (error) {
-        res.status(500).json({ message: error })
+        res.status(500).json({ message: error.message })
     }
 })
 

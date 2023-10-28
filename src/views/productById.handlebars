@@ -1,0 +1,27 @@
+<div class="container-products">
+
+    {{#if product}}
+        {{!-- {{#each product}} --}}
+            <div class="container-product">
+                
+                <h3>{{product.title}}</h3>
+                <p>trademark: {{product.trademark}}</p>
+                <p>description: {{product.description}}</p>
+                <p>price: {{product.price}}</p>
+                <p>status: {{product.status}}</p>
+                <p>category: {{product.category}}</p>
+                <p>code: {{product.code}}</p>
+                <p>stock: {{product.stock}}</p>
+                <p><img src="{{product.thumbnail}}" alt="imagen" class="imagen"></p>
+
+            </div>
+        {{!-- {{/each}} --}}
+    {{else}}
+        <h2>NO product</h2>
+    {{/if}}
+
+</div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/addProduct.js"></script>

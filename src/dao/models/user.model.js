@@ -2,10 +2,6 @@ import {Schema, model} from 'mongoose';
 
 //crear el esquema
 const userSchema = new Schema({
-    id:{
-        type: 'string',
-        required: true
-    },
     first_name:{
         type: 'string',
         required: true
@@ -16,10 +12,11 @@ const userSchema = new Schema({
     },
     email:{
         type: 'string',
-        required: true
+        required: true,
+        unique: true
     },
     password:{
-        type: 'number',
+        type: 'string',
         required: true
     },
     isAdmin:{

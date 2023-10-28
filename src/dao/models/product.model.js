@@ -1,11 +1,8 @@
 import {Schema, model} from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 //crear el esquema
 const productSchema = new Schema({
-    id:{
-        type: 'string',
-        required: true
-    },
     title:{
         type: 'string',
         required: true
@@ -43,6 +40,6 @@ const productSchema = new Schema({
     }
 });
 
-
+productSchema.plugin(mongoosePaginate)
 //crear el modelo/coll
 export const productModel = model('Products',productSchema);

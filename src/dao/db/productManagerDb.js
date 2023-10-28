@@ -1,32 +1,67 @@
+import { response } from "express";
 import { productModel } from "../models/product.model.js";
 
-class  ProductsManagerClass{
+class ProductsManagerClass {
 
     async getProducts(queryObj = null) {
-        const response = await productModel.find()
-        return response
+        try {
+            const { limit } = (queryObj ?? null)
+            const { sort } = (queryObj ?? null)
+            const { page } = (queryObj ?? null)
+            const { trademark } = (queryObj ?? null)
+            
+            const response = await productModel.paginate()
+            
+            return response
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 
-   async getProductsbyID(idProducto) {
-        const response = await studentModel.findById(idProducto)
-        return response
+    async getProductsbyID(idProducto) {
+        try {
+            const product = await productModel.findById(idProducto).lean()
+            if (!product) {
+                const response = -1
+                return response
+            }
+            const response = product
+            
+            return response
+            
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 
     async addProduct(obj) {
-        const response = await studentModel.create(obj)
-        return response
-    }    
+        try {
+            const response = await productModel.create(obj)
+            return response
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
 
     async updateProduct(idProducto, obj) {
-        const response = await studentModel.updateOne({_id:idProducto},{obj})
-        return response
+        try {
+            const response = await productModel.findByIdAndUpdate({ _id: idProducto }, {$set: obj})
+            return response
+        } catch (error) {
+            throw new Error(error);
+        }
     }
     async deleteProduct(idProducto) {
-        const response = await studentModel.findByIdAndDelete({_id:idProducto})
-        return response
+        try {
+            const response = await productModel.findByIdAndDelete({ _id: idProducto }) 
+            if (!response){
+                return -1
+            }
+            return response
+        } catch (error) {
+            throw new Error(error);
+        }
     }
-
 }
 
-
-export const ProductsManager = new ProductsManagerClass();
+export const productManagerClass = new ProductsManagerClass();

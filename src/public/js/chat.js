@@ -6,24 +6,7 @@ const divChat = document.getElementById("chat")
 
 let user;
 
-swal.fire({
-    title: 'Welcome',
-    text: 'Whats your name?',
-    input: 'text',
-    confirmButtonText: 'Enter',
-    inputValidator:(value)=>{
-        if(!value){
-        return "Name is required";}
-    }
-  }
-).then((input)=>{
-    user=input.value;
-    h3name.innerText=`Chat user: ${user}`
-    socketClient.emit('newUser',user)
-    // if (input.isConfimed){
-    //     swal.fire()
-    // }
-})
+
 
 socketClient.on('newUserBroadcast',(user)=>{
     Toastify({
@@ -44,6 +27,21 @@ socketClient.on('newUserBroadcast',(user)=>{
 
 form.onsubmit = (e)=>{
     e.preventDefault();
+    swal.fire({
+        title: 'Welcome',
+        text: 'Whats your name?',
+        input: 'text',
+        confirmButtonText: 'Enter',
+        inputValidator:(value)=>{
+            if(!value){
+            return "Name is required";}
+        }
+      }
+    ).then((input)=>{
+        user=input.value;
+        h3name.innerText=`Chat user: ${user}`
+        socketClient.emit('newUser',user)
+    })
     const infoMessage={
         name: user,
         message: inputMessage.value

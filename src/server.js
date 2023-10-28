@@ -7,7 +7,6 @@ import { engine } from 'express-handlebars';
 import viewsRouter from './routes/views.router.js'
 import {Server} from 'socket.io';
 import "./dao/config.js";
-import { ProductsManager } from './dao/db/productManagerDb.js';
 
 const app = express();
 app.use(express.json())
@@ -36,23 +35,23 @@ const socketServer = new Server(httpServer);
 //connection - disconnect
 const names = [];
 const messages = [];
-// socketServer.on('connection',(socket)=>{
-//     //console.log(`Cliente conectado: ${socket.id}`);
-//     socket.on("disconnect",()=>{
-//         //console.log(`Cliente desconectado: ${socket.id}`)
-//     })
+socketServer.on('connection',(socket)=>{
+    console.log(`Cliente conectado: ${socket.id}`);
+    socket.on("disconnect",()=>{
+        console.log(`Cliente desconectado: ${socket.id}`)
+    })
 
-//     socket.on('firstEvent',(info)=>{
-//         // names.push(info)
-//         // console.log(`Array: ${names}`);
-//         //socket.emit('secondEvent',names)
-//         //socketServer.emit('secondEvent',names)
-//         // socketServer.broadcast.emit('secondEvent',names)
-//         socketServer.emit('secondEvent',info)
-//     })
-//     }
+    socket.on('firstEvent',(info)=>{
+        names.push(info)
+        console.log(`Array: ${names}`);
+        socket.emit('secondEvent',names)
+        socketServer.emit('secondEvent',names)
+        socketServer.broadcast.emit('secondEvent',names)
+        socketServer.emit('secondEvent',info)
+    })
+    }
     
-// );
+);
 
 socketServer.on('connection',(socket)=>{
     socket.on('newProduct',(user)=>{
