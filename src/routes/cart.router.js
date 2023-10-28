@@ -55,16 +55,31 @@ router.delete('/:idCart', async (req, res) => {
     }
 })
 
-router.post('/:idCart/product/:idProduct', async (req, res) => {
+router.put('/:idCart/product/:idProduct', async (req, res) => {
     try {
         
         const { idCart } = req.params;
         const { idProduct } = req.params;
-        const cart = await cartManagerClass.addProductToCart(req.params)
+        const cart = await cartManagerClass.addProductToCart(req)
         if (cart === -1) {
             return res.status(400).json({ message: `Product with id: ${idProduct} not found`})
         }
         return res.status(200).json({ message: `Product with id: ${idProduct} loaded to cart with id: ${idCart} succesfully`, cart: cart })
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+})
+
+router.put('/:idCart/', async (req, res) => {
+    try {
+        
+        const { idCart } = req.params;
+        const cart = await cartManagerClass.updateProductsInCart(req)
+        if (cart === -1) {
+            return res.status(400).json({ message: `Cart not found`})
+        }
+        return res.status(200).json({ message: `Cart with id: ${idCart} succesfully Updated`, cart: cart })
     }
     catch (error) {
         return res.status(500).json({ message: error.message })

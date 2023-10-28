@@ -7,10 +7,8 @@ const router = Router();
 router.get('/', async (req, res) => {
     try {
 
-        const { limit } = (req.query ?? null)
+        const limit = req.query.limit ?? 10
         const { sort } = (req.query ?? null)
-        const { page } = (req.query ?? null)
-        const { trademark } = (req.query ?? null)
 
         const productos = await productManagerClass.getProducts(req.query)
 
@@ -28,7 +26,7 @@ router.get('/', async (req, res) => {
             mensajeOrden = `ordered to ${sort}`
         }
 
-        return res.status(200).json({ message: `Products found ` + mensajeLimite + " " + mensajeOrden, "products": productos })
+        return res.status(200).json({ message: `Products found ` + mensajeLimite + " " + mensajeOrden, "payload": productos })
     }
     catch (error) {
         return res.status(500).json({ message: error.message })

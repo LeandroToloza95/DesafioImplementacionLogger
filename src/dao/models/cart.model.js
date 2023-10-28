@@ -1,23 +1,25 @@
-import {Schema, model} from 'mongoose';
+import mongoose from 'mongoose';
 
 //crear el esquema
-const cartsSchema = new Schema({
+const cartsSchema = new mongoose.Schema({
 
-    products:{
-        type:[
+    products: {
+        type: [
             {
-                idProduct:{
-                    type: 'string',
+                product: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'Products'
                 },
-                quantity:{
-                    type: 'number',
+                quantity: {
+                    type: "number",
+                    default: 0,
                 }
             }
         ],
-        default:[{}]
+        default: [{}]
     }
 });
 
 
 //crear el modelo/coll
-export const cartModel = model('Carts',cartsSchema);
+export const cartModel = mongoose.model('Carts', cartsSchema);
