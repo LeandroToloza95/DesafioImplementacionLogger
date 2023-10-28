@@ -5,15 +5,31 @@ class ProductsManagerClass {
 
     async getProducts(queryObj = null) {
         try {
-            const { limit } = (queryObj ?? null)
-            const { sort } = (queryObj ?? null)
-            const { page } = (queryObj ?? null)
-            const { trademark } = (queryObj ?? null)
-            
-            const response = await productModel.paginate()
-            
+            const { limit } = queryObj ?? {}
+            const { sort } = queryObj ?? {}
+            const { page } = queryObj ?? {}
+            const { trademark } = queryObj ?? {}
+
+            let order
+            if (sort) {
+                switch (sort) {
+                    case 'ASC':
+                        order = 1
+                        break;
+                    case 'DESC':
+                        order = -1
+                        break;
+                    default:
+                        order = 1
+                        break;
+                }
+            }
+            console.log(trademark);
+            const response = await productModel.paginate({  }, { limit: limit, page: page, sort: { trademark: order } })
+
             return response
-        } catch (error) {
+        }
+        catch (error) {
             throw new Error(error);
         }
     }
@@ -26,9 +42,9 @@ class ProductsManagerClass {
                 return response
             }
             const response = product
-            
+
             return response
-            
+
         } catch (error) {
             throw new Error(error);
         }
@@ -45,7 +61,7 @@ class ProductsManagerClass {
 
     async updateProduct(idProducto, obj) {
         try {
-            const response = await productModel.findByIdAndUpdate({ _id: idProducto }, {$set: obj})
+            const response = await productModel.findByIdAndUpdate({ _id: idProducto }, { $set: obj })
             return response
         } catch (error) {
             throw new Error(error);
@@ -53,8 +69,8 @@ class ProductsManagerClass {
     }
     async deleteProduct(idProducto) {
         try {
-            const response = await productModel.findByIdAndDelete({ _id: idProducto }) 
-            if (!response){
+            const response = await productModel.findByIdAndDelete({ _id: idProducto })
+            if (!response) {
                 return -1
             }
             return response

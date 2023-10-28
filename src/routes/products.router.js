@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 
         const productos = await productManagerClass.getProducts(req.query)
 
-        if (!productos.length) {
+        if (!productos) {
             return res.status(200).json({ message: 'No products found' })
         }
 
