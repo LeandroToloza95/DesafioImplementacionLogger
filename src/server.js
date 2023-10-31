@@ -25,7 +25,7 @@ app.use('/api/users', usersRouter)
 app.use('/api/carts', cartRouter)
 
 //render handlebars
-app.use('/api',viewsRouter)
+app.use('/api/views',viewsRouter)
 
 const httpServer = app.listen(8080, () => console.log("Servidor 8080 escuchando"))
 

@@ -1,11 +1,13 @@
 import { Router } from "express";
 import { cartManagerClass } from '../dao/db/cartManagerDb.js'
+import { productManagerClass } from "../dao/db/productManagerDb.js";
 
 const router = Router();
 
 router.post('/', async (req, res) => {
     try {
-        const newCart = await cartManagerClass.createCart({})
+        const user = {user:"653c021fcd7b4d624132bc73"}
+        const newCart = await cartManagerClass.createCart(user)
         return res.status(200).json({ message: `New cart created with id ${newCart._id}`, cart: newCart })
     }
     catch (error) {
@@ -41,6 +43,7 @@ router.get('/:idCart', async (req, res) => {
     }
 })
 
+/*
 router.delete('/:idCart', async (req, res) => {
     try {
         const { idCart } = req.params
@@ -49,6 +52,50 @@ router.delete('/:idCart', async (req, res) => {
             return res.status(400).json({ message: 'Cart no found' })
         }
         return res.status(200).json({ message: `Cart with id ${carrito._id} deleted`, cart: carrito })
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+})
+*/
+router.delete('/:idCart/products/:idProduct', async (req, res) => {
+    try {
+        const { idCart } = req.params
+        const carrito = await cartManagerClass.getCartsbyID(idCart)
+        if (carrito === -1) {
+            return res.status(400).json({ message: 'Cart no found' })
+        }
+
+        const { idProduct } = req.params
+        const product = await productManagerClass.getProductsbyID(idProduct)
+        if (product === -1) {
+            return res.status(400).json({ message: 'Product no found' })
+        }
+
+        const response = await cartManagerClass.deleteProductInCart(idCart,idProduct)
+        if (response.modifiedCount !== 0){
+            return res.status(200).json({ message: `Product ${idProduct} in Cart ${carrito._id} deleted`})
+        }
+        return res.status(400).json({ message: 'Product no found in cart' })
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+})
+
+router.delete('/:idCart', async (req, res) => {
+    try {
+        const { idCart } = req.params
+        const carrito = await cartManagerClass.getCartsbyID(idCart)
+        if (carrito === -1) {
+            return res.status(400).json({ message: 'Cart no found' })
+        }
+
+        const response = await cartManagerClass.deleteProductsInCart(idCart)
+        if (response.modifiedCount !== 0){
+            return res.status(200).json({ message: `Products in Cart ${carrito._id} deleted`})
+        }
+        return res.status(400).json({ message: 'Products no found in cart' })
     }
     catch (error) {
         return res.status(500).json({ message: error.message })
@@ -76,9 +123,11 @@ router.put('/:idCart/', async (req, res) => {
         
         const { idCart } = req.params;
         const cart = await cartManagerClass.updateProductsInCart(req)
-        if (cart === -1) {
-            return res.status(400).json({ message: `Cart not found`})
+
+        if (cart.result === -1) {
+            return res.status(400).json({ message: cart.detail})
         }
+
         return res.status(200).json({ message: `Cart with id: ${idCart} succesfully Updated`, cart: cart })
     }
     catch (error) {

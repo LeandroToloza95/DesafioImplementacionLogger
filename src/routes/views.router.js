@@ -44,9 +44,11 @@ router.get('/productresponse/:idProduct',async(req,res) => {
     res.render('productById',{product:product, style:'list.css'})
 })
 
-router.get('/allproducts',async(req,res) => {
+router.get('/products',async(req,res) => {
     const products = await productManagerClass.getProducts()
-    res.render('allproducts',{products:products, style:'list.css'})
+    const productsLean=products.payload.map(doc => doc.toObject({ getters: true, virtuals: true }))
+
+    res.render('products',{products:productsLean, style:'list.css'})
 })
 
 router.get('/allusers',async(req,res) => {

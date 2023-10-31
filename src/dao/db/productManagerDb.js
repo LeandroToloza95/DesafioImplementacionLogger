@@ -5,11 +5,11 @@ class ProductsManagerClass {
 
     async getProducts(queryObj = null) {
         try {
-            const  limit  = queryObj.limit ?? 10
-            const { sort } = queryObj ?? {}
-            const  page  = queryObj.page ?? 1
+            const limit = queryObj?.limit ?? 10
+            const sort = queryObj?.sort ?? {}
+            const page = queryObj?.page ?? 1
             const { query } = queryObj ?? {}
-            
+
             const queryObject = JSON.parse((query || '{}'));
 
             let order
@@ -26,21 +26,21 @@ class ProductsManagerClass {
                         break;
                 }
             }
-            
-            const result = await productModel.paginate(queryObject, { limit: limit  , page: page, sort: { precio: order } })
+
+            const result = await productModel.paginate(queryObject, { limit: limit, page: page, sort: { precio: order } })
             const info = {
-                totalPages:result.totalPages,
-                prevPage:result.prevPage,
-                nextPage:result.nextPage,
-                page:result.page,
+                totalPages: result.totalPages,
+                prevPage: result.prevPage,
+                nextPage: result.nextPage,
+                page: result.page,
                 hasPrevPage: result.hasPrevPage,
-                hasNextPage :result.hasNextPage,
-                hasPrevPage: result.hasPrevPage ? `http://localhost:8080/api/products?page=${result.prevPage}`:null,
-                hasNextPage: result.hasNextPage ? `http://localhost:8080/api/products?page=${result.nextPage}`:null
+                hasNextPage: result.hasNextPage,
+                hasPrevPage: result.hasPrevPage ? `http://localhost:8080/api/products?page=${result.prevPage}` : null,
+                hasNextPage: result.hasNextPage ? `http://localhost:8080/api/products?page=${result.nextPage}` : null
 
             }
 
-            return { status: 'success', payload: result.docs,info}
+            return { status: 'success', payload: result.docs, info }
         }
         catch (error) {
             throw new Error(error);

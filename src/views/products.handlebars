@@ -10,10 +10,11 @@
                 <p>price: {{price}}</p>
                 <p>status: {{status}}</p>
                 <p>category: {{category}}</p>
-                <p>code: {{code}}</p>
+                <p>code: {{id}}</p>
                 <p>stock: {{stock}}</p>
                 <p><img src="{{thumbnail}}" alt="imagen" class="imagen"></p>
 
+                <div><p>Cantidad: <input type="number" name="cantidad" data-quantity-product-id="{{_id}}" default="0" value="0" required><button class="add-to-cart" data-product-id="{{_id}}">Agregar al carrito</button></div>
             </div>
         {{/each}}
     {{else}}
