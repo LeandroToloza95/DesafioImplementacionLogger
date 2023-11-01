@@ -17,11 +17,11 @@ const cartsSchema = new mongoose.Schema({
                 },
                 quantity: {
                     type: "number",
-                    default: 0,
+                    
                 }
             }
         ],
-        default: [{}]
+        default: []
     }
 });
 

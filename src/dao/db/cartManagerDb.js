@@ -3,6 +3,17 @@ import { productManagerClass } from "./productManagerDb.js"
 import mongoose from 'mongoose';
 class CartsManagerClass {
 
+    async cartByUserId(idUser) {
+        try {
+            const response = await cartModel.find({ user: idUser })
+            if (!response){
+                return -1
+            }
+            return response
+        } catch (error) {
+            throw new Error(error)
+        }
+    }
     async getCarts() {
         try {
             const response = await cartModel.find().populate('products.product')
@@ -37,7 +48,7 @@ class CartsManagerClass {
         try {
             const { idCart } = obj.params
             const { idProduct } = obj.params
-            const { quantity } = obj.query || 1
+            const { quantity } = obj.body || 1
 
             const producto = await productManagerClass.getProductsbyID(idProduct);
             const cart = await this.getCartsbyID(idCart)
@@ -51,8 +62,10 @@ class CartsManagerClass {
             }
 
             const productsInCartToAdd = cart.products
-            const productToAdd = productsInCartToAdd.find(u => u.product == idProduct) ?? null
-
+            //console.log(productsInCartToAdd);
+            //const prueba = productsInCartToAdd.map(u =>console.log( u.product._id + " " + idProduct))
+            
+            const productToAdd = productsInCartToAdd.find(u => u.product.id == idProduct) ?? null
 
             const response = await this.updateCartWithProduct(productToAdd, idCart, idProduct, object)
             return response

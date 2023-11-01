@@ -43,6 +43,20 @@ router.get('/:idCart', async (req, res) => {
     }
 })
 
+router.get('/getCartByUser/:idUser', async (req, res) => {
+    try {
+        const { idUser } = req.params
+        const carrito = await cartManagerClass.cartByUserId(idUser)
+        if (carrito === -1) {
+            return res.status(400).json({ message: `Cart no found with id user: ${idUser}` })
+        }
+        return res.status(200).json({ message: `Cart with id ${carrito._id}`, cart: carrito })
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+})
+
 /*
 router.delete('/:idCart', async (req, res) => {
     try {
@@ -104,7 +118,7 @@ router.delete('/:idCart', async (req, res) => {
 
 router.put('/:idCart/product/:idProduct', async (req, res) => {
     try {
-        
+
         const { idCart } = req.params;
         const { idProduct } = req.params;
         const cart = await cartManagerClass.addProductToCart(req)
