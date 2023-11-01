@@ -5,15 +5,15 @@
     {{#each products}}
     <div class="container-product">
         {{product}}
-        <h3>{{title}}</h3>
+        <a href="/api/views/products/{{_id}}"><h3>{{title}}</h3></a>
         <p>trademark: {{trademark}}</p>
-        <p>description: {{description}}</p>
-        <p>price: {{price}}</p>
-        <p>status: {{status}}</p>
+        {{!-- <p>description: {{description}}</p> --}}
+        <p>price: $ {{price}}</p>
+        {{!-- <p>status: {{status}}</p>
         <p>category: {{category}}</p>
-        <p>code: {{id}}</p>
+        <p>code: {{id}}</p> --}}
         <p>stock: {{stock}}</p>
-        <p><img src="{{thumbnail}}" alt="imagen" class="imagen"></p>
+        <p> <a href="/api/views/products/{{_id}}"><img src="{{thumbnail}}" alt="imagen" class="imagen"></a></p>
 
         <div>
             <p>Cantidad: <input type="number" name="cantidad" data-quantity-product-id="{{_id}}" default="0" value="1"  min="1"

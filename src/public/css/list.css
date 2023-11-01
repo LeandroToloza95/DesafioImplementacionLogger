@@ -74,3 +74,11 @@ span {
     height: 60px;
 }
 
+a{
+    text-decoration: none;
+    display: flex;
+    /* Utilizar flexbox para centrar verticalmente */
+    align-items: center;
+    /* Centrar verticalmente */
+    justify-content: space-around;
+}

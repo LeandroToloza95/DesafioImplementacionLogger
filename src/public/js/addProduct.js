@@ -3,13 +3,8 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
         const productId = this.getAttribute('data-product-id');
         const quantityInput = document.querySelector(`input[data-quantity-product-id='${productId}']`);
         const quantityValue = quantityInput.value
-        const user = "653c021fcd7b4d624132bc73"
+        const user = "653b8e95f811bb5b4ce7d19d"
         const cartId = await getCartByUserId(user);
-        /*
-        console.log("id de carrito: " + cartId);
-        console.log("id de producto: " + productId);
-        console.log("cantidad: " + cantidadValue);
-        */
         const response = await sendProductToCart(cartId, productId, quantityValue);
 
 

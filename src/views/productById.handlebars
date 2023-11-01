@@ -1,23 +1,29 @@
 <div class="container-products">
 
     {{#if product}}
-        {{!-- {{#each product}} --}}
-            <div class="container-product">
-                
-                <h3>{{product.title}}</h3>
-                <p>trademark: {{product.trademark}}</p>
-                <p>description: {{product.description}}</p>
-                <p>price: {{product.price}}</p>
-                <p>status: {{product.status}}</p>
-                <p>category: {{product.category}}</p>
-                <p>code: {{product.code}}</p>
-                <p>stock: {{product.stock}}</p>
-                <p><img src="{{product.thumbnail}}" alt="imagen" class="imagen"></p>
+    {{!-- {{#each product}} --}}
+    <div class="container-product">
 
-            </div>
-        {{!-- {{/each}} --}}
+        <h3>{{product.title}}</h3>
+        <p>trademark: {{product.trademark}}</p>
+        <p>description: {{product.description}}</p>
+        <p>price: {{product.price}}</p>
+        <p>status: {{product.status}}</p>
+        <p>category: {{product.category}}</p>
+        <p>code: {{product.code}}</p>
+        <p>Id: {{product._id}}</p>
+        <p>stock: {{product.stock}}</p>
+        <p><img src="{{product.thumbnail}}" alt="imagen" class="imagen"></p>
+        <div>
+            <p>Cantidad: <input type="number" name="cantidad" data-quantity-product-id="{{product._id}}" default="0" value="1"
+                    min="1" required>
+                <button class="add-to-cart" data-product-id="{{product._id}}">Agregar al carrito</button>
+        </div>
+    </div>
+
+    {{!-- {{/each}} --}}
     {{else}}
-        <h2>NO product</h2>
+    <h2>NO product</h2>
     {{/if}}
 
 </div>

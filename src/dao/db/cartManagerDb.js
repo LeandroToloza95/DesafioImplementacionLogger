@@ -16,7 +16,7 @@ class CartsManagerClass {
     }
     async getCarts() {
         try {
-            const response = await cartModel.find().populate('products.product')
+            const response = await cartModel.find().populate('products.product').populate('user').lean()
             return response
         } catch (error) {
             throw new Error(error);

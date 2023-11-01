@@ -1,0 +1,30 @@
+<div class="container-carts">
+
+    {{#if carts}}
+    {{#each carts}}
+    <div class="container-product">
+        {{cart}}
+        <a href="/api/views/carts/{{_id}}">
+            <h3>Carrito: {{_id}}</h3>
+        </a>
+        <p>Usuario: {{user.first_name}} {{user.last_name}}</p>
+        {{#each products}}
+        <div>
+            <p>Producto: {{product.title}}</p>
+            <p>Precio: ${{product.price}}</p>
+            <p>Cantidad: {{quantity}}</p>
+        </div>
+        {{/each}}
+        {{!-- <p>Total: $ {{price}}</p> --}}
+
+    </div>
+    {{/each}}
+    {{else}}
+    <h2>NO product</h2>
+    {{/if}}
+
+</div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/addProduct.js"></script>
