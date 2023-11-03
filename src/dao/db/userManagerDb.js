@@ -52,6 +52,23 @@ class  UsersManagerClass{
         }
     }
 
+    async getUsersbyMail(email){
+        try{
+            const user = await userModel.findOne({email}).lean()    
+
+            if (!user) {
+                const response = -1
+                return response
+            }
+
+            const response = user
+            return response
+        }
+        catch(error){
+            throw new Error(error);
+        }
+    }
+
     async addUser(obj){
         try{
             const response = await userModel.create(obj)

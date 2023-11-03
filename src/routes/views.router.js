@@ -26,10 +26,6 @@ router.get('/chat', (req, res) => {
     res.render('chat')
 })
 
-router.get('/signup', (req, res) => {
-    res.render('signup', { style: 'signup.css' })
-})
-
 router.get('/signupresponse/:idUser', async (req, res) => {
     const { idUser } = req.params
     const user = await userManagerClass.getUsersbyID(idUser)
@@ -45,10 +41,15 @@ router.get('/products/:idProduct', async (req, res) => {
 })
 
 router.get('/products', async (req, res) => {
+
+    const { email, first_name, last_name } = req.session
     const products = await productManagerClass.getProducts()
     const productsLean = products.payload.map(doc => doc.toObject({ getters: true, virtuals: true }))
 
-    res.render('products', { products: productsLean, style: 'list.css' })
+    const data = { products: productsLean, 
+        user: { email, first_name, last_name } }
+
+    res.render('products', {data, style: 'list.css' })
 })
 
 router.get('/carts', async (req, res) => {
@@ -76,4 +77,11 @@ router.get('/', (req, res) => {
     res.render('websocket', { style: 'list.css' })
 })
 
+router.get('/login', (req, res) => {
+    res.render('login', { style: 'list.css' })
+})
+
+router.get('/signup', (req, res) => {
+    res.render('signup', { style: 'list.css' })
+})
 export default router

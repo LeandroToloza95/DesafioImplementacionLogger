@@ -1,11 +1,20 @@
-
+<div>
+    {{#if data.user}}
+    <h2>Bienvenido {{data.user.first_name}} {{data.user.last_name}}!</h2>
+    {{else}}
+    <h2>Bienvenido!</h2>
+    {{/if}}
+    <button onclick="location.href=`/api/users/session/logout`">Logout</button>
+</div>
 <div class="container-products">
 
-    {{#if products}}
-    {{#each products}}
+    {{#if data.products}}
+    {{#each data.products}}
     <div class="container-product">
         {{product}}
-        <a href="/api/views/products/{{_id}}"><h3>{{title}}</h3></a>
+        <a href="/api/views/products/{{_id}}">
+            <h3>{{title}}</h3>
+        </a>
         <p>trademark: {{trademark}}</p>
         {{!-- <p>description: {{description}}</p> --}}
         <p>price: $ {{price}}</p>
@@ -16,8 +25,8 @@
         <p> <a href="/api/views/products/{{_id}}"><img src="{{thumbnail}}" alt="imagen" class="imagen"></a></p>
 
         <div>
-            <p>Cantidad: <input type="number" name="cantidad" data-quantity-product-id="{{_id}}" default="0" value="1"  min="1"
-                    required>
+            <p>Cantidad: <input type="number" name="cantidad" data-quantity-product-id="{{_id}}" default="0" value="1"
+                    min="1" required>
                 <button class="add-to-cart" data-product-id="{{_id}}">Agregar al carrito</button>
         </div>
     </div>
