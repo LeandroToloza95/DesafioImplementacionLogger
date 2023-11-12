@@ -8,6 +8,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 export default __dirname
 // console.log(__dirname);
 
+//bcrypt
 export const hashData = async(data) => {
     const hash = await bcrypt.hash(data,10);
     return hash

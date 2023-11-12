@@ -84,4 +84,9 @@ router.get('/login', (req, res) => {
 router.get('/signup', (req, res) => {
     res.render('signup', { style: 'list.css' })
 })
+
+router.get('/error', (req, res) => {
+    res.render('error', { style: 'list.css' })
+})
+
 export default router

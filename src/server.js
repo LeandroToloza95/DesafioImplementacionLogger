@@ -12,6 +12,8 @@ import cookieParser, { signedCookie } from 'cookie-parser';
 import session from 'express-session'
 import FileStore from "session-file-store"
 import MongoStore from 'connect-mongo';
+import passport from 'passport';
+import './passport.js';
 
 const app = express();
 
@@ -43,13 +45,14 @@ app.use(session({
     })
 }))
 
-
+//passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 //handlebars
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.set('views', __dirname + '/views');
-
 
 //routes
 app.use('/api/products', productsRouter)

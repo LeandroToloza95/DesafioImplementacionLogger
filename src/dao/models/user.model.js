@@ -19,6 +19,10 @@ const userSchema = new Schema({
         type: 'string',
         required: true
     },
+    from_github:{
+        type: 'boolean',
+        default: false
+    },
     isAdmin:{
         type: 'string',
         required: true
