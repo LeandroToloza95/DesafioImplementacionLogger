@@ -1,5 +1,7 @@
-<form action="/api/users/login" method="post">
+<form action="/api/sessions/login" method="post">
     <p>Email: <input type="text" name="email" id="email"></p>
     <p>Password: <input type="text" name="password" id="password"></p>
     <p><input type="submit" value="Login" /></p>
 </form>
+
+<button onclick="location.href='/api/sessions/auth/github'">GITHUB</button>

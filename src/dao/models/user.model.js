@@ -23,6 +23,11 @@ const userSchema = new Schema({
         type: 'boolean',
         default: false
     },
+    role:{
+        type: 'string',
+        enum: ['admin', 'premiun','client'],
+        default: 'client'
+    },
     isAdmin:{
         type: 'string',
         required: true

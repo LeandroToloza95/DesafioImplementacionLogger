@@ -5,7 +5,7 @@ class ProductsManagerClass {
 
     async getProducts(queryObj = null) {
         try {
-            const limit = queryObj?.limit ?? 10
+            const limit = queryObj?.limit ?? 100
             const sort = queryObj?.sort ?? {}
             const page = queryObj?.page ?? 1
             const { query } = queryObj ?? {}

@@ -61,7 +61,7 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ message: 'Information sent is incompleted' })
         }
         const newProduct = await productManagerClass.addProduct(req.body)
-        res.redirect(`/api/productresponse/${newProduct.id}`)
+        res.redirect(`/api/views/products/${newProduct.id}`)
         //res.status(200).json({ message: `New products created with id ${newProduct.id}`, products: newProduct })
 
     }

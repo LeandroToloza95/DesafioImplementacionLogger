@@ -2,7 +2,10 @@ import passport from "passport";
 import { userManagerClass } from "./dao/db/userManagerDb.js";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GitHubStrategy } from "passport-github2";
+import { ExtractJwt, Strategy as JWTStrategy } from "passport-jwt";
 import { hashData, compareData } from "./utils.js";
+
+const JWT_SECRET = 'jwtSECRET'
 
 //local
 passport.use('signup', new LocalStrategy(
@@ -52,37 +55,70 @@ passport.use('login', new LocalStrategy(
 //GitHub
 passport.use('github', new GitHubStrategy(
     {
-        clientID: 'clientID',
-        clientSecret: 'clientSecret',
-        callbackURL: "http://localhost:8080/api/views/users/github"
+        clientID: 'Iv1.dea0b4ac7692d16e',
+        clientSecret: '82d5f50447020e5788dd7312adeacd58ea5fcfb8',
+        callbackURL: "http://localhost:8080/api/sessions/github"
     }, async (accessToken, refreshToken, profile, done) => {
-        console.log(profile);
-        try{
-            const userDB=await userManagerClass.getUsersbyMail(profile.mail);
+
+        try {
+
+            const userDB = await userManagerClass.getUsersbyMail(profile._json.email);
+
             //login user
             if (userDB !== -1) {
-                if(userDB.from_github){
-                    return done(null,userDB)
-                }else{
-                    return done(null,false)
+
+                if (userDB.from_github) {
+                    return done(null, userDB)
+                } else {
+                    return done(null, false)
                 }
             }
             //signup user
-            const newUser={
-                first_name:"prueba",
-                last_name:"test",
-                email:profile.mail,
+            const newUser = {
+                first_name: profile._json.name.split(' ')[0],
+                last_name: profile._json.name.split(' ')[1] || "",
+                email: profile._json.email,
                 password: "12345",
-                from_github:true,
+                from_github: true,
                 isAdmin: "on"
             }
-            const createdUser=await userManagerClass.addUser(newUser);
-            done(null,createdUser)
-        }catch(error){
+            const createdUser = await userManagerClass.addUser(newUser);
+            done(null, createdUser)
+        } catch (error) {
             done(error)
         }
     }
 ))
+
+//JWT
+passport.use('jwt', new JWTStrategy(
+    {
+        secretOrKey: JWT_SECRET,
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
+    },
+    async (jwt_payload, done) => {
+        done(null, jwt_payload)
+    }
+
+))
+
+//JWT con cookies
+
+const fromCookies = (req)=>{
+    return req.cookies.token;
+}
+
+passport.use('jwt', new JWTStrategy(
+    {
+        secretOrKey: JWT_SECRET,
+        jwtFromRequest: ExtractJwt.fromExtractors([fromCookies])
+    },
+    async (jwt_payload, done) => {
+        done(null, jwt_payload)
+    }
+
+))
+
 
 passport.serializeUser(function (user, done) {
     done(null, user._id);

@@ -41,7 +41,6 @@ router.get('/products/:idProduct', async (req, res) => {
 })
 
 router.get('/products', async (req, res) => {
-
     const { email, first_name, last_name } = req.session
     const products = await productManagerClass.getProducts()
     const productsLean = products.payload.map(doc => doc.toObject({ getters: true, virtuals: true }))
