@@ -16,7 +16,7 @@ class CartsManagerClass {
     }
     async getCarts() {
         try {
-            const response = await cartModel.find().populate('products.product').populate('user').lean()
+            const response = await cartModel.find().populate('products.product').lean()
             return response
         } catch (error) {
             throw new Error(error);
@@ -58,7 +58,7 @@ class CartsManagerClass {
             }
             const object = {
                 "product": idProduct,
-                "quantity": quantity
+                "quantity": quantity || 1
             }
 
             const productsInCartToAdd = cart.products
@@ -146,7 +146,7 @@ class CartsManagerClass {
     }
 
     async updateCartWithProduct(productToAdd, idCart, idProduct, object) {
-        //console.log(productToAdd,idCart,object);
+        
         if (productToAdd === null) {
             const response = await cartModel.updateOne({ _id: idCart }, { $push: { "products": object } })
             return response

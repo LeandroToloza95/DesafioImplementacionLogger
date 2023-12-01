@@ -52,6 +52,8 @@ router.get('/', async (req, res) => {
 // })
 
 //passport jwt
+
+
 router.get('/:iduser', passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
         console.log(req.user);
@@ -68,6 +70,7 @@ router.get('/:iduser', passport.authenticate('jwt', { session: false }), async (
     }
 
 })
+
 
 router.delete('/:iduser', authMiddleware, async (req, res) => {
     try {

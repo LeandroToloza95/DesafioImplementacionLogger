@@ -2,6 +2,7 @@ import { Router } from "express";
 import passport from "passport";
 import { compareData, generateToken, hashData } from "../utils.js";
 import { userManagerClass } from '../dao/db/userManagerDb.js'
+import { cartManagerClass } from '../dao/db/cartManagerDb.js'
 
 const router = Router();
 
@@ -40,7 +41,7 @@ router.post('/login', async (req, res) => {
         //httpOnly : true -> no permite sacar desde el front la cookie
         res
             .status(200)
-            .cookie("token", token,{httpOnly:true})
+            .cookie("token", token, { httpOnly: true })
             .json({ message: `Welcome ${userDB.first_name}`, token })
         //res.redirect(`/api/views/products`)
 
@@ -53,17 +54,17 @@ router.post('/login', async (req, res) => {
 router.post('/signup', async (req, res) => {
     //validacion del body de campos obligatorios
     try {
-        const { first_name, last_name, email, password, isAdmin, role } = req.body
+        const { first_name, last_name, email, password, age, role } = req.body
 
         const hashedPassword = await hashData(password)
         //FS
         //req.session["email"] = email
 
-        if (!first_name || !last_name || !email || !password || !isAdmin) {
+        if (!first_name || !last_name || !email || !password|| !age) {
             return res.status(400).json({ message: 'Information sent is incompleted' })
         }
-
-        const newUser = await userManagerClass.addUser({ ...req.body, password: hashedPassword })
+        const cart = await cartManagerClass.createCart()
+        const newUser = await userManagerClass.addUser({ ...req.body, password: hashedPassword, cart: cart.id })
         //En vez de enviar la anterior linea envio una ventana mas personalizada
         res.status(200)//.json({ message: `New users created with id ${newUser.id}`, users: newUser })
         res.redirect(`/api/views/signupresponse/${newUser.id}`)
@@ -112,4 +113,13 @@ router.get('/logout', (req, res) => {
 
 })
 
+router.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile','email'] }));
+
+router.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/api/views/signup' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect(`/api/views/signupresponse/${req.user.id}`);
+  });
 export default router

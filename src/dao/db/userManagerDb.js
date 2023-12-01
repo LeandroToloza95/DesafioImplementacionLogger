@@ -1,3 +1,4 @@
+// import { populate } from "moongose/models/user_model.js";
 import  {userModel}  from "../models/user.model.js";
 
 class  UsersManagerClass{
@@ -18,7 +19,7 @@ class  UsersManagerClass{
                     orderId = null
             }
 
-            const consulta = userModel.find()
+            const consulta = userModel.find().populate('cart').lean()
 
             if(orderId){
                 consulta.sort({ last_name : orderId })
@@ -27,7 +28,7 @@ class  UsersManagerClass{
                 consulta.limit(limit)
             }    
 
-            const response = await consulta.lean()
+            const response = await consulta
             return response
         }
         catch(error){
@@ -54,7 +55,7 @@ class  UsersManagerClass{
 
     async getUsersbyMail(email){
         try{
-            const user = await userModel.findOne({email}).lean()    
+            const user = await userModel.findOne({email}).populate('cart').lean()    
 
             if (!user) {
                 const response = -1

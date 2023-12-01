@@ -2,12 +2,12 @@ import mongoose from 'mongoose';
 
 //crear el esquema
 const cartsSchema = new mongoose.Schema({
-    user:  {
-        type: mongoose.Schema.Types.ObjectId,
-        ref:'Users',
-        required: true
-    }
-    ,
+    // user:  {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref:'Users',
+    //     required: true
+    // }
+    // ,
     products: {
         type: [
             {

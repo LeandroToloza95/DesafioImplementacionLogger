@@ -6,8 +6,7 @@ const router = Router();
 
 router.post('/', async (req, res) => {
     try {
-        const user = {user:"653c021fcd7b4d624132bc73"}
-        const newCart = await cartManagerClass.createCart(user)
+        const newCart = await cartManagerClass.createCart()
         return res.status(200).json({ message: `New cart created with id ${newCart._id}`, cart: newCart })
     }
     catch (error) {

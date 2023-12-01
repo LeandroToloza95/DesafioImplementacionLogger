@@ -2,10 +2,12 @@ import passport from "passport";
 import { userManagerClass } from "./dao/db/userManagerDb.js";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GitHubStrategy } from "passport-github2";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { ExtractJwt, Strategy as JWTStrategy } from "passport-jwt";
 import { hashData, compareData } from "./utils.js";
+import config from "./config.js";
+import { cartManagerClass } from './dao/db/cartManagerDb.js'
 
-const JWT_SECRET = 'jwtSECRET'
 
 //local
 passport.use('signup', new LocalStrategy(
@@ -55,9 +57,9 @@ passport.use('login', new LocalStrategy(
 //GitHub
 passport.use('github', new GitHubStrategy(
     {
-        clientID: 'Iv1.dea0b4ac7692d16e',
-        clientSecret: '82d5f50447020e5788dd7312adeacd58ea5fcfb8',
-        callbackURL: "http://localhost:8080/api/sessions/github"
+        clientID: config.github_client_id,
+        clientSecret: config.github_client_secret,
+        callbackURL: config.github_callback_url
     }, async (accessToken, refreshToken, profile, done) => {
 
         try {
@@ -74,14 +76,16 @@ passport.use('github', new GitHubStrategy(
                 }
             }
             //signup user
+            const cart = await cartManagerClass.createCart()
             const newUser = {
                 first_name: profile._json.name.split(' ')[0],
                 last_name: profile._json.name.split(' ')[1] || "",
                 email: profile._json.email,
                 password: "12345",
-                from_github: true,
-                isAdmin: "on"
+                cart:cart.id,
+                from_github: true
             }
+
             const createdUser = await userManagerClass.addUser(newUser);
             done(null, createdUser)
         } catch (error) {
@@ -90,10 +94,51 @@ passport.use('github', new GitHubStrategy(
     }
 ))
 
+//Google
+passport.use('google', new GoogleStrategy(
+    {
+        clientID: config.google_client_id,
+        clientSecret: config.google_client_secret,
+        callbackURL: config.google_callback_url
+      },
+      async(accessToken, refreshToken, profile, done)=>{
+        // console.log("email",profile._json.email);
+        try{
+            const userDB = await userManagerClass.getUsersbyMail(profile._json.email);
+
+            //login user
+            if (userDB !== -1) {
+
+                if (userDB.from_google) {
+                    return done(null, userDB)
+                } else {
+                    return done(null, false)
+                }
+            }
+            //signup user
+            const cart = await cartManagerClass.createCart()
+            const newUser = {
+                first_name: profile._json.name.split(' ')[0],
+                last_name: profile._json.name.split(' ')[1] || "",
+                email: profile._json.email,
+                password: "12345",
+                cart:cart.id,
+                from_google: true
+            }
+            const createdUser = await userManagerClass.addUser(newUser);
+            done(null, createdUser)
+
+        }catch(error){
+            done(error)
+        }
+        
+      }
+))
+
 //JWT
 passport.use('jwt', new JWTStrategy(
     {
-        secretOrKey: JWT_SECRET,
+        secretOrKey: config,
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
     },
     async (jwt_payload, done) => {
@@ -110,7 +155,7 @@ const fromCookies = (req)=>{
 
 passport.use('jwt', new JWTStrategy(
     {
-        secretOrKey: JWT_SECRET,
+        secretOrKey: config.jwt_secret,
         jwtFromRequest: ExtractJwt.fromExtractors([fromCookies])
     },
     async (jwt_payload, done) => {

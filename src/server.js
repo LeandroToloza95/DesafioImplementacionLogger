@@ -15,6 +15,7 @@ import FileStore from "session-file-store"
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
 import './passport.js';
+import config from "./config.js";
 
 const app = express();
 
@@ -36,13 +37,11 @@ app.use(cookieParser(secret))
 // }))
 
 //session mongo
-const URI = 'mongodb+srv://mleandrot1995:Greenday23@cluster0.lwrgoh0.mongodb.net/ecommerce?retryWrites=true&w=majority'
-
 app.use(session({
-    secret: "SESSIONSECRETKEY",
+    secret: config.secret_key,
     cookie:{maxAge: 60*60*1000},
     store:new MongoStore({
-        mongoUrl:URI,
+        mongoUrl:config.mongo_uri,
     })
 }))
 

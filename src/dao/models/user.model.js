@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import {Schema, model} from 'mongoose';
 
 //crear el esquema
@@ -15,6 +16,9 @@ const userSchema = new Schema({
         required: true,
         unique: true
     },
+    age:{
+        type: 'number'
+    },
     password:{
         type: 'string',
         required: true
@@ -23,14 +27,18 @@ const userSchema = new Schema({
         type: 'boolean',
         default: false
     },
+    from_google:{
+        type: 'boolean',
+        default: false
+    },
     role:{
         type: 'string',
-        enum: ['admin', 'premiun','client'],
-        default: 'client'
+        enum: ['admin', 'premium','user'],
+        default: 'user'
     },
-    isAdmin:{
-        type: 'string',
-        required: true
+    cart:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Carts',
     }
 });
 
