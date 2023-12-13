@@ -3,17 +3,6 @@ import { productManagerClass } from "./productManagerDb.js"
 import mongoose from 'mongoose';
 class CartsManagerClass {
 
-    async cartByUserId(idUser) {
-        try {
-            const response = await cartModel.find({ user: idUser })
-            if (!response){
-                return -1
-            }
-            return response
-        } catch (error) {
-            throw new Error(error)
-        }
-    }
     async getCarts() {
         try {
             const response = await cartModel.find().populate('products.product').lean()
@@ -44,30 +33,19 @@ class CartsManagerClass {
         }
     }
 
-    async addProductToCart(obj) {
+    async addNewProductToCart(idCart, object) {
         try {
-            const { idCart } = obj.params
-            const { idProduct } = obj.params
-            const { quantity } = obj.body || 1
+            const response = await cartModel.updateOne({ _id: idCart }, { $push: { "products": object } })
+            return response
+        }
+        catch (error) {
+            throw new Error(error);
+        }
+    }
 
-            const producto = await productManagerClass.getProductsbyID(idProduct);
-            const cart = await this.getCartsbyID(idCart)
-
-            if (producto === -1) {
-                return -1
-            }
-            const object = {
-                "product": idProduct,
-                "quantity": quantity || 1
-            }
-
-            const productsInCartToAdd = cart.products
-            //console.log(productsInCartToAdd);
-            //const prueba = productsInCartToAdd.map(u =>console.log( u.product._id + " " + idProduct))
-            
-            const productToAdd = productsInCartToAdd.find(u => u.product.id == idProduct) ?? null
-
-            const response = await this.updateCartWithProduct(productToAdd, idCart, idProduct, object)
+    async modifyExistentProductToCart(idCart, idProduct, object) {
+        try {
+            const response = await cartModel.updateOne({ _id: idCart, "products.product": idProduct }, { $set: { ["products.$"]: object } })
             return response
         }
         catch (error) {
@@ -136,6 +114,7 @@ class CartsManagerClass {
         const response = await cartModel.updateOne({ _id: idCart }, { $set: { "products": [] } })
         return response
     }
+
     async deleteCart(id) {
         try {
             const response = await cartModel.findByIdAndDelete(id)
@@ -145,16 +124,6 @@ class CartsManagerClass {
         }
     }
 
-    async updateCartWithProduct(productToAdd, idCart, idProduct, object) {
-        
-        if (productToAdd === null) {
-            const response = await cartModel.updateOne({ _id: idCart }, { $push: { "products": object } })
-            return response
-        } else {
-            const response = await cartModel.updateOne({ _id: idCart, "products.product": idProduct }, { $set: { ["products.$"]: object } })
-            return response
-        }
-    }
 }
 
 export const cartManagerClass = new CartsManagerClass();

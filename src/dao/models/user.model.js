@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import {Schema, model} from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 //crear el esquema
 const userSchema = new Schema({
@@ -42,6 +43,6 @@ const userSchema = new Schema({
     }
 });
 
-
+userSchema.plugin(mongoosePaginate)
 //crear el modelo/coll
 export const userModel = model('Users',userSchema);
