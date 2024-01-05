@@ -1,6 +1,7 @@
 import { cartModel } from "../models/cart.model.js";
-import { productManagerClass } from "./productManagerDb.js"
+import { productManagerClass } from "./products.mongo.js"
 import mongoose from 'mongoose';
+
 class CartsManagerClass {
 
     async getCarts() {
@@ -45,7 +46,7 @@ class CartsManagerClass {
 
     async modifyExistentProductToCart(idCart, idProduct, object) {
         try {
-            const response = await cartModel.updateOne({ _id: idCart, "products.product": idProduct }, { $set: { ["products.$"]: object } })
+            const response = await cartModel.updateOne({ _id: idCart, "products.product": idProduct }, { $set: { "products.$.quantity": object.quantity } })
             return response
         }
         catch (error) {

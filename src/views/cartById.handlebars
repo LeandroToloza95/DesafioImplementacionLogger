@@ -1,0 +1,32 @@
+<div class="container-carts">
+    <h3>Usuario: <span id="user_name">{{user.first_name}} {{user.last_name}}</span></h3>
+    <p>Mail: <span id="user_mail">{{user.email}}</span></p>
+    <p>Carrito: <span id="cart_id">{{cart}}</span></p>
+    <button onclick="location.href=`/api/views/products`">Volver a Productos</button>
+    <button class="add-to-cart" id="finish_purchase_button">Finalizar compra</button>
+    {{#if cart}}
+    <div class="container-products">
+
+        {{#each products}}
+
+        <div class="container-product">
+            <p>
+            <h4><span id="product_title">{{product.title}}</span></h4>
+            <h5>Codigo:<span id="product_id">{{product.id}}</span></h5>
+            </p>
+            <p>Precio unidad: $<span id="product_price">{{product.price}}</span></p>
+            <p>Cantidad:<span id="product_quantity">{{quantity}}</span></p>
+            <p>Monto: $ <span id="purchase_amount">{{monto}}</span></p>
+
+        </div>
+        {{/each}}
+    </div>
+    {{else}}
+    <h2>NO CART</h2>
+    {{/if}}
+
+</div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/finishPurchase.js"></script>

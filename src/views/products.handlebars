@@ -5,6 +5,7 @@
     <h2>Bienvenido!</h2>
     {{/if}}
     <button onclick="location.href=`/api/sessions/logout`">Logout</button>
+    <button onclick="location.href=`/api/views/carts/{{data.user.cart._id}}`">Ir al carrito</button>
 </div>
 <div class="container-products">
 
@@ -16,11 +17,7 @@
             <h3>{{title}}</h3>
         </a>
         <p>trademark: {{trademark}}</p>
-        {{!-- <p>description: {{description}}</p> --}}
         <p>price: $ {{price}}</p>
-        {{!-- <p>status: {{status}}</p>
-        <p>category: {{category}}</p>
-        <p>code: {{id}}</p> --}}
         <p>stock: {{stock}}</p>
         <p> <a href="/api/views/products/{{_id}}"><img src="{{thumbnail}}" alt="imagen" class="imagen"></a></p>
 

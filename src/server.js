@@ -2,8 +2,8 @@ import express from 'express';
 import productsRouter from './routes/products.router.js';
 import cartRouter from './routes/cart.router.js';
 import usersRouter from './routes/users.router.js';
-import loginRouter from './routes/login.router.js';
 import sessionRouter from './routes/sessions.router.js';
+import ticketRouter from './routes/tickets.router.js';
 import __dirname from './utils.js';
 import { engine } from 'express-handlebars';
 import viewsRouter from './routes/views.router.js'
@@ -38,7 +38,7 @@ app.use(cookieParser(secret))
 
 //session mongo
 app.use(session({
-    secret: config.secret_key,
+    secret: config.jwt_secret,
     cookie:{maxAge: 60*60*1000},
     store:new MongoStore({
         mongoUrl:config.mongo_uri,
@@ -59,6 +59,7 @@ app.use('/api/products', productsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/carts', cartRouter)
 app.use('/api/sessions',sessionRouter)
+app.use('/api/tickets',ticketRouter)
 //app.use('/api/login', loginRouter)
 
 //render handlebars

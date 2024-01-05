@@ -1,12 +1,12 @@
 import passport from "passport";
-import { userManagerClass } from "./dao/db/userManagerDb.js";
+import { userManagerClass } from "./dao/db/users.mongo.js";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GitHubStrategy } from "passport-github2";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { ExtractJwt, Strategy as JWTStrategy } from "passport-jwt";
 import { hashData, compareData } from "./utils.js";
 import config from "./config.js";
-import { cartManagerClass } from './dao/db/cartManagerDb.js'
+import { cartManagerClass } from './dao/db/carts.mongo.js';
 
 
 //local
@@ -77,9 +77,10 @@ passport.use('github', new GitHubStrategy(
             }
             //signup user
             const cart = await cartManagerClass.createCart()
+            console.log(profile._json);
             const newUser = {
-                first_name: profile._json.name.split(' ')[0],
-                last_name: profile._json.name.split(' ')[1] || "",
+                first_name: profile._json.name !== null  ? profile._json.name.split(' ')[0]: "sin nombre",
+                last_name: profile._json.name !== null  ? profile._json.name.split(' ')[1]: "sin apellido",
                 email: profile._json.email,
                 password: "12345",
                 cart:cart.id,
@@ -138,7 +139,7 @@ passport.use('google', new GoogleStrategy(
 //JWT
 passport.use('jwt', new JWTStrategy(
     {
-        secretOrKey: config,
+        secretOrKey: config.jwt_secret,
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
     },
     async (jwt_payload, done) => {

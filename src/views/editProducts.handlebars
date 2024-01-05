@@ -1,0 +1,44 @@
+<div>
+    {{#if data.user}}
+    <h2>Bienvenido {{data.user.first_name}} {{data.user.last_name}}!</h2>
+    {{else}}
+    <h2>Bienvenido!</h2>
+    {{/if}}
+    <button onclick="location.href=`/api/sessions/logout`">Logout</button>
+</div>
+<div class="container-products">
+
+    {{#if data.products}}
+    {{#each data.products}}
+        {{product}}
+        <form action="/api/products/{{_id}}" method="post" id="productForm {{_id}}">
+            <p>
+            <div><b>ID producto: {{_id}} </b> </div>
+            </p>
+            <p><span><b>Title:</b> {{title}} </span> <textarea type="text" name="title" id="title"
+                    class="textarea-title"></textarea>
+            <p><span><b>Trademark:</b> {{trademark}}</span> <input type="text" name="trademark" id="trademark"></p>
+            <p><span><b>Description:</b> {{description}}</span> <input type="text" name="description" id="description">
+            </p>
+            <p><span><b>Price:</b> {{price}}</span> <input type="number" name="price" id="price"></p>
+            <p><span><b>Status: </b>{{status}}</span> <input type="text" name="status" id="status"></p>
+            <p><span><b>Category:</b> {{category}} </span> <input type="text" name="category" id="category"></p>
+            <p><span><b>Thumbnail:</b> {{thumbnail}}</span> <input type="url" name="thumbnail" id="thumbnail"></p>
+            <p><span><b>Code:</b>{{code}}</span> <input type="number" name="code" id="code"></p>
+            <p><span><b>Stock:</b> {{stock}}</span> <input type="number" name="stock" id="stock"></p>
+
+            <div>
+                <button class="delete-product" data-product-id="{{_id}}">Eliminar producto</button>
+                <button class="update-product" data-product-id="{{_id}}">Actualizar producto</button>
+            </div>
+        </form>
+    {{/each}}
+    {{else}}
+    <h2>NO product</h2>
+    {{/if}}
+
+</div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/editProducts.js"></script>

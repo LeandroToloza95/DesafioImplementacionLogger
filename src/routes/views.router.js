@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { cartManagerClass } from "../dao/db/cartManagerDb.js";
-import { productManagerClass } from "../dao/db/productManagerDb.js";
-import { userManagerClass } from "../dao/db/userManagerDb.js";
+import {cartService} from "../services/carts.services.js"
+import { userService } from "../services/users.services.js";
+import { productService } from "../services/products.services.js";
 
 const router = Router()
 
@@ -36,30 +36,43 @@ router.get('/signupresponse/:idUser', async (req, res) => {
 router.get('/products/:idProduct', async (req, res) => {
     const { idProduct } = req.params
     const product = await productManagerClass.getProductsbyID(idProduct)
-    console.log(product);
     res.render('productById', { product: product, style: 'list.css' })
 })
 
 router.get('/products', async (req, res) => {
-    const { email, first_name, last_name } = req.session
-    const products = await productManagerClass.getProducts()
+    const { userId } = req.session
+    const products = await productService.findAll()
+    const user = await userService.findById(userId)
     const productsLean = products.payload.map(doc => doc.toObject({ getters: true, virtuals: true }))
-
     const data = { products: productsLean, 
-        user: { email, first_name, last_name } }
+        user: user }
 
     res.render('products', {data, style: 'list.css' })
 })
 
-router.get('/carts', async (req, res) => {
-    try {
-        const carts = await cartManagerClass.getCarts()
-        //console.log(carts);
-        //carts.map(doc => console.log(doc));
-        //carts.map(doc => console.log(doc.toObject({ getters: true, virtuals: true })));
-        //const cartsLean = carts.map(doc => doc.toObject({ getters: true, virtuals: true }))
+router.get('/editProducts', async (req, res) => {
+    const { email, first_name, last_name } = req.session
+    
+    const products = await productManagerClass.getProducts()
+    const productsLean = products.docs.map(doc => doc.toObject({ getters: true, virtuals: true }))
 
-        res.render('carts', { carts: carts, style: 'list.css' })
+    const data = { products: productsLean, 
+        user: { email, first_name, last_name } }
+
+    res.render('editProducts', {data, style: 'list.css' })
+})
+
+router.get('/carts/:cartId', async (req, res) => {
+    try {
+        const {cartId} = req.params
+        const user = await userService.findBycartId(cartId)
+        const cart = await cartService.findById(cartId)
+        const products = cart.products.map(product => product.toObject({ getters: true, virtuals: true }))
+        const productsWithAmount = products.map((producto) => {
+            const monto = producto.quantity * producto.product.price;
+            return { ...producto, monto }; // Copiar las propiedades existentes y agregar "monto"
+          });
+        res.render('cartById', {cart:cartId,user, products: productsWithAmount, style: 'list.css' })
     } catch (error) {
         console.log(error.message);
     }

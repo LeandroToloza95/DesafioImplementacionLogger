@@ -1,6 +1,6 @@
 <h3>Add products</h3>
 <div class="container_form">
-    <form action="/api/products/" method="post">
+    <form action="/api/products/" method="post" id="productForm">
         <p><span>Title</span> <textarea type="text" name="title" id="title" class="textarea-title"></textarea>
         <p><span>Trademark:</span> <input type="text" name="trademark" id="trademark"></p>
         <p><span>Description:</span> <input type="text" name="description" id="description"></p>
@@ -14,6 +14,5 @@
     </form>
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<script src="/js/createProduct.js"></script>

@@ -16,7 +16,9 @@ class UsersManagerClass {
 
     async getUsersbyID(id) {
         try {
+
             const user = await userModel.findById(id).populate('cart').lean()
+
             if (!user) {
                 const response = -1
                 return response
@@ -45,7 +47,26 @@ class UsersManagerClass {
         }
     }
 
+    async getUsersByCartId(cart) {
+        try {
+            const user = await userModel.findOne({ cart }).populate('cart').lean()
+
+            if (!user) {
+                const response = -1
+                return response
+            }
+
+            const response = user
+            return response
+        }
+        catch (error) {
+            throw new Error(error);
+        }
+    }
+    
+
     async addUser(obj) {
+
         try {
             const response = await userModel.create(obj)
             return response
