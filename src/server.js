@@ -4,6 +4,7 @@ import cartRouter from './routes/cart.router.js';
 import usersRouter from './routes/users.router.js';
 import sessionRouter from './routes/sessions.router.js';
 import ticketRouter from './routes/tickets.router.js';
+import mockingRouter from './routes/mocking.router.js';
 import __dirname from './utils.js';
 import { engine } from 'express-handlebars';
 import viewsRouter from './routes/views.router.js'
@@ -60,7 +61,7 @@ app.use('/api/users', usersRouter)
 app.use('/api/carts', cartRouter)
 app.use('/api/sessions',sessionRouter)
 app.use('/api/tickets',ticketRouter)
-//app.use('/api/login', loginRouter)
+app.use('/api/mocking',mockingRouter)
 
 //render handlebars
 app.use('/api/views',viewsRouter)

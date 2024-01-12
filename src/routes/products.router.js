@@ -10,5 +10,6 @@ router.get('/', productController.findProducts)
 router.get('/:idproduct', productController.findProductById )
 router.delete('/:idproduct',passport.authenticate('jwt', { session: false }),authMiddleware(['admin']), productController.deleteProductById )
 router.put('/:idproduct',passport.authenticate('jwt', { session: false }),authMiddleware(['admin']), productController.updateProductById )
+//router.get('/mockingproducts', productController.createProductMoking )
 
 export default router

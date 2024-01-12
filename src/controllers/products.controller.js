@@ -1,13 +1,46 @@
 import { productService } from '../services/products.services.js'
+import {generateProducts} from '../faker.js'
+import CustomError from "../error/not-found.error.js";
+import {ErrorMessages} from  "../error/error.enum.js"
 class ProductsController {
     createProduct = async (req, res) => {
         try {
             //validacion del body de campos obligatorios
             
             const { title, description, price, trademark, status, category, code, stock } = req.body
-            if (!title || !description || !price || !trademark || !status || !category || !code || !stock) {
+
+            if (!title){
+                CustomError.createError(ErrorMessages.TITTLE_NOT_INTRODUCED)
                 return res.status(400).json({ message: 'Information sent is incompleted' })
             }
+            if (!description){
+                CustomError.createError(ErrorMessages.DESCRIPTION_NOT_INTRODUCED)
+                return res.status(400).json({ message: 'Information sent is incompleted' })
+            }
+            if (!price){
+                CustomError.createError(ErrorMessages.PRICE_NOT_INTRODUCED)
+                return res.status(400).json({ message: 'Information sent is incompleted' })
+            }            
+            if (!trademark){
+                CustomError.createError(ErrorMessages.TRADEMARK_NOT_INTRODUCED)
+                return res.status(400).json({ message: 'Information sent is incompleted' })
+            } 
+            if (!status){
+                CustomError.createError(ErrorMessages.STATUS_NOT_INTRODUCED)
+                return res.status(400).json({ message: 'Information sent is incompleted' })
+            }   
+            if (!category){
+                CustomError.createError(ErrorMessages.CATEGORY_NOT_INTRODUCED)
+                return res.status(400).json({ message: 'Information sent is incompleted' })
+            }   
+            if (!code){
+                CustomError.createError(ErrorMessages.CODE_NOT_INTRODUCED)
+                return res.status(400).json({ message: 'Information sent is incompleted' })
+            } 
+            if (!stock){
+                CustomError.createError(ErrorMessages.STATUS_NOT_INTRODUCED)
+                return res.status(400).json({ message: 'Information sent is incompleted' })
+            } 
             
             const newProduct = await productService.createOne(req.body)
             const responseMessage = { success: true, message: `New products created with id ${newProduct.id}` , products: newProduct};
@@ -16,6 +49,7 @@ class ProductsController {
 
         }
         catch (error) {
+            console.log(error)
             return res.status(500).json({ message: error.message })
         }
     }
@@ -96,6 +130,36 @@ class ProductsController {
         }
         catch (error) {
             res.status(500).json({ message: error.message })
+        }
+    }
+
+    createProductMoking= async (req, res) => {
+        try {
+            //validacion del body de campos obligatorios
+            let createdProducts =[]
+            for(let i=0;i<5;i++) {
+                const product = generateProducts()
+                const { title, description, price, trademark, status, category, code, stock } = product
+                if (!title) {
+                    CustomError.createError(ErrorMessages.USER_NOT_FOUND)
+                    return res.status(400).json({ message: 'Information sent is incompleted' })
+                }
+                
+                if (!title || !description || !price || !trademark || !status || !category || !code || !stock) {
+                    return res.status(400).json({ message: 'Information sent is incompleted' })
+                }
+                
+                const newProduct = await productService.createOne(product)
+                createdProducts.push(newProduct)
+                
+            }
+            const responseMessage = { products: createdProducts};
+            //res.redirect(302,`/api/views/products/${newProduct.id}`)
+            return res.status(200).json(responseMessage)
+
+        }
+        catch (error) {
+            return res.status(500).json({ message: error.message })
         }
     }
 }
