@@ -1,0 +1,20 @@
+{
+  message: 'Probando fatal',
+  level: 'fatal',
+  timestamp: '2024-01-19T22:45:58.925Z'
+}
+{
+  message: 'Probando error',
+  level: 'error',
+  timestamp: '2024-01-19T22:45:58.925Z'
+}
+{
+  message: 'Probando fatal',
+  level: 'fatal',
+  timestamp: '2024-01-19T22:46:32.556Z'
+}
+{
+  message: 'Probando error',
+  level: 'error',
+  timestamp: '2024-01-19T22:46:32.558Z'
+}

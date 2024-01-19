@@ -5,6 +5,7 @@ import usersRouter from './routes/users.router.js';
 import sessionRouter from './routes/sessions.router.js';
 import ticketRouter from './routes/tickets.router.js';
 import mockingRouter from './routes/mocking.router.js';
+import loggerTestRouter from './routes/loggertest.router.js';
 import __dirname from './utils.js';
 import { engine } from 'express-handlebars';
 import viewsRouter from './routes/views.router.js'
@@ -17,6 +18,7 @@ import MongoStore from 'connect-mongo';
 import passport from 'passport';
 import './passport.js';
 import config from "./config.js";
+import { logger } from './winston.js'
 
 const app = express();
 
@@ -62,6 +64,9 @@ app.use('/api/carts', cartRouter)
 app.use('/api/sessions',sessionRouter)
 app.use('/api/tickets',ticketRouter)
 app.use('/api/mocking',mockingRouter)
+app.use('/api/loggerTest',loggerTestRouter)
+
+
 
 //render handlebars
 app.use('/api/views',viewsRouter)
@@ -99,7 +104,7 @@ app.get('/deletecookie', (req,res)=>{
     
 })
 
-const httpServer = app.listen(8080, () => console.log("Servidor 8080 escuchando"))
+const httpServer = app.listen(8080, () => logger.info("Servidor 8080 escuchando"))
 
 //Websocket - desde lado servidor
 const socketServer = new Server(httpServer);

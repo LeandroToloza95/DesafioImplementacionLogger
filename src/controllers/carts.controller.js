@@ -1,12 +1,17 @@
 import { cartService } from '../services/carts.services.js'
+import { logger } from '../winston.js'
+
 
 class CartsController {
     createCart = async (req, res) => {
         try {
             const newCart = await cartService.createOne()
+            logger.info(`Cart created with id ${newCart._id}`)
             return res.status(200).json({ message: `New cart created with id ${newCart._id}`, cart: newCart })
+            
         }
         catch (error) {
+            logger.error(`Error to create a new cart, message: ${error.message}`)
             return res.status(500).json({ message: error })
         }
     }
